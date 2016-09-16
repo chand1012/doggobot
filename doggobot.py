@@ -5,7 +5,11 @@ from bs4 import BeautifulSoup
 import urllib
 import sys, os
 import json
-#modify for github
+'''
+TO DO:
+--clean up code
+-- add some more comments
+'''
 
 def keys(which_key='-1'):
     try:
