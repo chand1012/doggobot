@@ -1,0 +1,8 @@
+{
+  "client_id_imgur" : "Imgur client ID",
+  "client_secret_imgur" : "Imgur client secret",
+  "tw_consumer_key" : "Twitter consumer key",
+  "tw_consumer_secret" : "Twitter consumer secret",
+  "access_token" : "Twitter Access token",
+  "access_secret" : "Twitter access secret"
+}
