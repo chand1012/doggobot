@@ -1,4 +1,5 @@
 from imgurpython import ImgurClient
+from datetime import datetime
 import tweepy
 import time
 from bs4 import BeautifulSoup
@@ -7,15 +8,16 @@ import sys, os
 import json
 '''
 TO DO:
---clean up code
+-- clean up code
+-- make the clock function to execute code at certian time
 -- add some more comments
 '''
-
-def keys(which_key='-1'):
+# handles the keys from the specified file
+def keys(which_key='-1', file_name='keys.json'):
     try:
-        file_keys = open("keys.json")
+        file_keys = open(file_name)
     except:
-        print "Error! JSON file does not exist! \nPlease download template and make your own."
+        print "Error! JSON file does not exist!"
         raise
     parsed_json = json.loads(file_keys.read())
 
@@ -34,16 +36,25 @@ def keys(which_key='-1'):
     else:
         return parsed_json
 
-
+#this will be replaced later
 def min_sleep(sleeptime):
     actual_time = 60*int(sleeptime)
     print "Waiting for {} minutes...".format(sleeptime)
     time.sleep(actual_time)
-
+#simple function for wget
+#if you are on Windows (such as myself) please use Windows wget
 def wget(url, name):
     os.system("wget {} -O {}".format(url, name))
 
+#handles image retreval
 def get_img(url):
+    #check for cache then if not found creates it
+    if not os.path.exists('cache'):
+        print "Cache not found, creating one..."
+        os.makedirs('cache')
+
+    #checks for file extension, and if true, skips to download.
+    #If not it parses the html and extracts the image link
     extensions = ['.jpg', '.gif', '.png']
     if not any(thing in url for thing in extensions):
         print "No extension, extracting direct link..."
@@ -115,8 +126,8 @@ def main(time_in_between_posts=1, amt_of_posts=1, clear_data='true'):
 
     print "Found! Beginning posting..."
     for dog in dog_photos:
-        image_of_dog = get_img(dog)
-        post_photo(dog, "cache/{}".format(image_of_dog))
+        image_of_dog = get_img(dog)    
+        post_photo("#dogs #dog #imgur {}".format(dog), "cache/{}".format(image_of_dog))
         print "Posted!"
         min_sleep(time_in_between_posts)
     if clear_data == 'true':
@@ -125,5 +136,10 @@ def main(time_in_between_posts=1, amt_of_posts=1, clear_data='true'):
         pass
 
 
-while True:
+if len(sys.argv) == 1:
+    print "Not enough system arguments! Please retry with arguments."
+    sys.exit()
+elif sys.argv[1] == 'auto':
+    main() # enter your own code parameters
+else:
     main(sys.argv[1], sys.argv[2], sys.argv[3])
