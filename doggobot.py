@@ -36,6 +36,20 @@ def keys(which_key='-1', file_name='keys.json'):
     else:
         return parsed_json
 
+#get times from the file
+def get_times(which_time='-1', file_name='times.json'):
+        try:
+            file_times = open(file_name)
+        except:
+            print "Error! JSON file does not exist!"
+            raise
+        parsed_json = json.loads(file_keys.read())
+
+        if which_time is -1:
+            return parsed_json
+        else:
+            return parsed_json['time{}'.format(which_time)]
+
 #this will be replaced later
 def min_sleep(sleeptime):
     actual_time = 60*int(sleeptime)
@@ -48,30 +62,33 @@ def wget(url, name):
 
 #handles image retreval
 def get_img(url):
-    #check for cache then if not found creates it
-    if not os.path.exists('cache'):
-        print "Cache not found, creating one..."
-        os.makedirs('cache')
+    if 'imgur' in url:
+        #check for cache then if not found creates it
+        if not os.path.exists('cache'):
+            print "Cache not found, creating one..."
+            os.makedirs('cache')
 
-    #checks for file extension, and if true, skips to download.
-    #If not it parses the html and extracts the image link
-    extensions = ['.jpg', '.gif', '.png']
-    if not any(thing in url for thing in extensions):
-        print "No extension, extracting direct link..."
-        imgur_item = urllib.urlopen(url)
-        page = BeautifulSoup(imgur_item, 'html.parser')
-        image_link_raw = page.img.get('src')
-        image_link = image_link_raw[2:]
+            #checks for file extension, and if true, skips to download.
+            #If not it parses the html and extracts the image link
+        extensions = ['.jpg', '.gif', '.png']
+        if not any(thing in url for thing in extensions):
+            print "No extension, extracting direct link..."
+            imgur_item = urllib.urlopen(url)
+            page = BeautifulSoup(imgur_item, 'html.parser')
+            image_link_raw = page.img.get('src')
+            image_link = image_link_raw[2:]
+        else:
+            print "Direct link, downloading..."
+            image_link = url
+        if 'http://' in image_link:
+            image_link_http = image_link
+        else:
+            image_link_http = "http://{}".format(image_link)
+            name = image_link[12:]
+        wget(image_link_http, "cache/{}".format(name))
+        return name
     else:
-        print "Direct link, downloading..."
-        image_link = url
-    if 'http://' in image_link:
-        image_link_http = image_link
-    else:
-        image_link_http = "http://{}".format(image_link)
-    name = image_link[12:]
-    wget(image_link_http, "cache/{}".format(name))
-    return name
+        return None
 
 
 def post_photo(text, tweet_image):
@@ -107,7 +124,7 @@ def main(time_in_between_posts=1, amt_of_posts=1, clear_data='true'):
         else:
             answer_clear = 'false'
         print "Clear data after run?: {}".format(answer_clear)
-    if isinstance(time_in_between_posts, list):
+    if time_in_between_posts is -1:
         time_list = time_in_between_posts
 
     #Imgur ids
@@ -128,31 +145,31 @@ def main(time_in_between_posts=1, amt_of_posts=1, clear_data='true'):
 
     print "Found! Beginning posting..."
     for dog in dog_photos:
-        image_of_dog = get_img(dog)
-        post_photo("#dogs #dog #imgur {}".format(dog), "cache/{}".format(image_of_dog))
-        print "Posted!"
+        ''' this needs fixed
+        # wait at beginning so that it will not start the first post until the specified time
         counter = 0
-        if isinstance(time_in_between_posts, list):
+        if time_in_between_posts is -1:
             while True:
                 current_time = str(datetime.now().time())
-                if current_time[:5] == time_list[counter]:
+                if current_time[:5] == str(time_list):
                     counter += 1
                     break
                 else:
                     pass
         else:
             min_sleep(int(time_in_between_posts))
-            
+        '''
+        image_of_dog = get_img(dog)
+        if not image_of_dog == None:
+            post_photo("#dogs #dog #imgur {}".format(dog), "cache/{}".format(image_of_dog))
+            print "Posted!"
+            min_sleep(int(time_in_between_posts))
+        else:
+            print "Image not valid, skipping to next image."
+
     if clear_data == 'true':
         clear_cache()
     else:
         pass
 
-
-if len(sys.argv) == 1:
-    print "Not enough system arguments! Please retry with arguments."
-    sys.exit()
-elif sys.argv[1] == 'auto':
-    main() # enter your own code parameters
-else:
-    main(sys.argv[1], sys.argv[2], sys.argv[3])
+main(60, 6, 'true')
