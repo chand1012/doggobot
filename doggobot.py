@@ -107,6 +107,8 @@ def main(time_in_between_posts=1, amt_of_posts=1, clear_data='true'):
         else:
             answer_clear = 'false'
         print "Clear data after run?: {}".format(answer_clear)
+    if isinstance(time_in_between_posts, list):
+        time_list = time_in_between_posts
 
     #Imgur ids
     client_id = str(keys(1))
@@ -126,10 +128,21 @@ def main(time_in_between_posts=1, amt_of_posts=1, clear_data='true'):
 
     print "Found! Beginning posting..."
     for dog in dog_photos:
-        image_of_dog = get_img(dog)    
+        image_of_dog = get_img(dog)
         post_photo("#dogs #dog #imgur {}".format(dog), "cache/{}".format(image_of_dog))
         print "Posted!"
-        min_sleep(time_in_between_posts)
+        counter = 0
+        if isinstance(time_in_between_posts, list):
+            while True:
+                current_time = str(datetime.now().time())
+                if current_time[:5] == time_list[counter]:
+                    counter += 1
+                    break
+                else:
+                    pass
+        else:
+            min_sleep(int(time_in_between_posts))
+            
     if clear_data == 'true':
         clear_cache()
     else:

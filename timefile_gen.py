@@ -2,11 +2,11 @@ from json import dumps
 # this will create a file for the times to post photos
 times = []
 while True:
-    a_time = [raw_input('Enter time to post at: ')]
-    if a_time == '':
+    try:
+        a_time = [raw_input('Enter time to post at: ')]
+    except EOFError:
         break
-    else:
-        times += a_time
+    times += a_time
 
 counter = 1
 data = {}
