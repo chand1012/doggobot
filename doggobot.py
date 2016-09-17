@@ -11,6 +11,7 @@ TO DO:
 -- clean up code
 -- make the clock function to execute code at certian time
 -- add some more comments
+-- fix the issue with the cache not being able to be written to
 '''
 # handles the keys from the specified file
 def keys(which_key='-1', file_name='keys.json'):
