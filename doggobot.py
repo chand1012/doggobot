@@ -40,21 +40,6 @@ def keys(which_key='-1', file_name='keys.json'):
     else:
         return parsed_json
 
-''' this is  defunctional at the moment
-#get times from the file
-def get_times(which_time='-1', file_name='times.json'):
-        try:
-            file_times = open(file_name)
-        except:
-            print "Error! JSON file does not exist!"
-            raise
-        parsed_json = json.loads(file_keys.read())
-
-        if which_time is -1:
-            return parsed_json
-        else:
-            return parsed_json['time{}'.format(which_time)]
-'''
 #this will be replaced later
 def min_sleep(sleeptime):
     actual_time = 60*int(sleeptime)
