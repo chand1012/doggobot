@@ -1,18 +1,21 @@
 from imgurpython import ImgurClient
 from datetime import datetime
 import tweepy
-import time
+import time, schedule
 from bs4 import BeautifulSoup
 import urllib
 import sys, os
 import json
+
 '''
 TO DO:
 -- clean up code
--- make the clock function to execute code at certian time
+-- rewrite main function to use the 'schedule' module
 -- add some more comments
 -- fix the issue with the cache not being able to be written to
 '''
+
+
 # handles the keys from the specified file
 def keys(which_key='-1', file_name='keys.json'):
     try:
@@ -37,6 +40,7 @@ def keys(which_key='-1', file_name='keys.json'):
     else:
         return parsed_json
 
+''' this is  defunctional at the moment
 #get times from the file
 def get_times(which_time='-1', file_name='times.json'):
         try:
@@ -50,7 +54,7 @@ def get_times(which_time='-1', file_name='times.json'):
             return parsed_json
         else:
             return parsed_json['time{}'.format(which_time)]
-
+'''
 #this will be replaced later
 def min_sleep(sleeptime):
     actual_time = 60*int(sleeptime)
@@ -145,21 +149,7 @@ def main(time_in_between_posts=1, amt_of_posts=1, clear_data='true'):
             break
 
     print "Found! Beginning posting..."
-    for dog in dog_photos:
-        ''' this needs fixed
-        # wait at beginning so that it will not start the first post until the specified time
-        counter = 0
-        if time_in_between_posts is -1:
-            while True:
-                current_time = str(datetime.now().time())
-                if current_time[:5] == str(time_list):
-                    counter += 1
-                    break
-                else:
-                    pass
-        else:
-            min_sleep(int(time_in_between_posts))
-        '''
+    for dog in dog_photos: # these need to be reprogrammed to intergrate schedule module
         image_of_dog = get_img(dog)
         if not image_of_dog == None:
             post_photo("#dogs #dog #imgur {}".format(dog), "cache/{}".format(image_of_dog))
@@ -172,5 +162,3 @@ def main(time_in_between_posts=1, amt_of_posts=1, clear_data='true'):
         clear_cache()
     else:
         pass
-
-main(60, 6, 'true')
