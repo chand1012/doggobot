@@ -1,7 +1,7 @@
 from imgurpython import ImgurClient
 from datetime import datetime
 import tweepy
-import time, schedule
+from time import sleep
 from bs4 import BeautifulSoup
 import urllib
 import sys, os
@@ -10,11 +10,15 @@ import json
 '''
 TO DO:
 -- clean up code
--- rewrite main function to use the 'schedule' module
+-- clean up useless code in the get_img() function
 -- add some more comments
 -- fix the issue with the cache not being able to be written to
 '''
 
+def wait(sleeptime):
+    actual_time = 60*int(sleeptime)
+    print "Waiting for {} minutes...".format(sleeptime)
+    sleep(actual_time)
 
 # handles the keys from the specified file
 def keys(which_key='-1', file_name='keys.json'):
@@ -40,11 +44,6 @@ def keys(which_key='-1', file_name='keys.json'):
     else:
         return parsed_json
 
-#this will be replaced later
-def min_sleep(sleeptime):
-    actual_time = 60*int(sleeptime)
-    print "Waiting for {} minutes...".format(sleeptime)
-    time.sleep(actual_time)
 #simple function for wget
 #if you are on Windows (such as myself) please use Windows wget
 def wget(url, name):
@@ -76,10 +75,30 @@ def get_img(url):
             image_link_http = "http://{}".format(image_link)
             name = image_link[12:]
         wget(image_link_http, "cache/{}".format(name))
+        print "Done!"
         return name
     else:
         return None
 
+def get_img_by_ids(id_array):
+    amt = 0
+    for image in id_array:
+        img_url = "http://imgur.com/a/{}".format(image)
+        get_img(img_url)
+        amt += 1
+    return amt
+
+def clear_cache():
+    print "Clearing cache..."
+    try:
+        os.chdir('cache')
+        stuff = os.listdir('.')
+        for thing in stuff:
+            os.remove(thing)
+        os.chdir('..')
+    except:
+        print "Cache does not exist!"
+    print "Done!"
 
 def post_photo(text, tweet_image):
     #Twitter id's and login
@@ -92,58 +111,48 @@ def post_photo(text, tweet_image):
     auth.set_access_token(access, accesssecret)
     tclient = tweepy.API(auth)
     tclient.update_with_media(tweet_image, text)
+    print "Done!"
 
-
-def clear_cache():
-    print "Clearing cache..."
-    os.chdir('cache')
-    stuff = os.listdir('.')
-    for thing in stuff:
-        os.remove(thing)
-    os.chdir('..')
-
-def main(time_in_between_posts=1, amt_of_posts=1, clear_data='true'):
-    if len(sys.argv) > 2:
-        print "Running with default or code-set parameters."
-    else:
-        print "Running with Args set as:"
-        print "Time inbetween posts: {}".format(time_in_between_posts)
-        print "Amount of posts: {}".format(amt_of_posts)
-        if clear_data == 'true':
-            answer_clear = clear_data
-        else:
-            answer_clear = 'false'
-        print "Clear data after run?: {}".format(answer_clear)
-    if time_in_between_posts is -1:
-        time_list = time_in_between_posts
-
-    #Imgur ids
+def get_photo_ids(search, limit=1):
     client_id = str(keys(1))
     client_secret = str(keys(2))
     iclient = ImgurClient(client_id, client_secret)
-
-    print "Finding Images..."
-    get_photos = iclient.gallery_search("title:dogs ext:jpg", sort='time', window='day')
-    dog_photos = []
+    print "Finding images with search criteria {}".format(search)
+    get_photos = iclient.gallery_search(search, sort='time', window='day')
+    photo_ids = []
     stop = 0
 
+    print "Getting ids of {} images".format(limit)
     for photo in get_photos:
         stop += 1
-        dog_photos += [photo.link]
-        if stop >= amt_of_posts:
+        photo_ids += [photo.id]
+        if stop >= int(limit):
             break
+    print "Done!"
+    return photo_ids
 
-    print "Found! Beginning posting..."
-    for dog in dog_photos: # these need to be reprogrammed to intergrate schedule module
-        image_of_dog = get_img(dog)
-        if not image_of_dog == None:
-            post_photo("#dogs #dog #imgur {}".format(dog), "cache/{}".format(image_of_dog))
-            print "Posted!"
-            min_sleep(int(time_in_between_posts))
+def get_cache():
+    extensions = ['.jpg', '.gif', '.png']
+    os.chdir('cache')
+    items = os.listdir('.')
+    for item in items:
+        if not any(thing in item for thing in extensions):
+            items.remove(item)
         else:
-            print "Image not valid, skipping to next image."
+            pass
+    os.chdir('..')
+    return items
 
-    if clear_data == 'true':
-        clear_cache()
+def main(text="#dogs #imgur", search='title:dogs', limit=1, timer=5, clear=True):
+    gotten = get_photo_ids(search, limit)
+    get_img_by_ids(gotten)
+    cached_images = get_cache()
+    for image in cached_images:
+        image_location = "cache/{}".format(image)
+        post_photo(text, image_location)
+        wait(timer)
+    if clear == True:
+        clear_cache
     else:
         pass
+main()
