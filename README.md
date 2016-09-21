@@ -1,2 +1,2 @@
 # doggobot
-Finds images of dogs on Imgur and posts to Twitter with link to photo.
+Finds images on Imgur based on given criteria and posts to Twitter with specified text.
