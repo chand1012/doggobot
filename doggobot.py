@@ -1,5 +1,4 @@
 from imgurpython import ImgurClient
-from datetime import datetime
 import tweepy
 from time import sleep
 from bs4 import BeautifulSoup
@@ -155,4 +154,5 @@ def main(text="#dogs #imgur", search='title:dogs', limit=1, timer=5, clear=True)
         clear_cache
     else:
         pass
+
 main()
