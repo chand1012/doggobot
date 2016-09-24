@@ -79,5 +79,5 @@ def follow_user_followers_random(user, wait_time=1):
                 print "Error! Already following or user {} doesn't exist.".format(follower)
                 pass
 
-random_user = random.randint(1, 350000000) # this should cover most of the twitter users
+random_user = random.randint(1, 320000000) # this should cover most of the twitter users
 follow_user_followers_random(random_user)
