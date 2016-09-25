@@ -44,9 +44,11 @@ def follow_user_followers_random(user, wait_time=1):
     auth = tweepy.OAuthHandler(mainkey, mainsecret)
     auth.set_access_token(access, accesssecret)
     tclient = tweepy.API(auth)
-
-    followers = tclient.followers_ids(user)
-
+    try:
+        followers = tclient.followers_ids(user)
+    except:
+        print "User {} not found.".format(user)
+        sys.exit()
     if len(followers) > 100:
         count = 0
         test_followers = []
