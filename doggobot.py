@@ -6,13 +6,6 @@ import urllib
 import sys, os
 import json
 
-'''
-TO DO:
--- clean up code
--- clean up useless code in the get_img() function
--- add some more comments
--- fix the issue with the cache not being able to be written to
-'''
 
 def wait(sleeptime):
     actual_time = 60*int(sleeptime)
