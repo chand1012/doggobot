@@ -1,3 +1,4 @@
+#NEED TO TEST
 from __future__ import print_function
 from future import standard_library
 standard_library.install_aliases()
@@ -10,6 +11,8 @@ import urllib.request, urllib.parse, urllib.error
 import sys, os
 import json
 
+global version
+version = int(sys.version[:1])
 
 def wait(sleeptime):
     actual_time = 60*int(sleeptime)
@@ -18,11 +21,23 @@ def wait(sleeptime):
 
 # handles the keys from the specified file
 def keys(which_key='-1', file_name='keys.json'):
-    try:
-        file_keys = open(file_name)
-    except:
-        print("Error! JSON file does not exist!")
-        raise
+    while True:
+        try:
+            file_keys = open(file_name)
+        except:
+            print("Error! JSON file does not exist!")
+            print("Would you like to make the file with the JSON generator?")
+            if version > 2:
+                run = input("(Y/N):")
+            else:
+                run = raw_input("(Y/N):")
+            if run == 'y' or run? == 'Y':
+                os.system('python json_gen.py')
+                pass
+            else:
+                raise
+        else:
+            break
     parsed_json = json.loads(file_keys.read())
 
     if int(which_key) is 1:
@@ -96,22 +111,22 @@ def clear_cache():
         print("Cache does not exist!")
     print("Done!")
 
-def post_photo(text, tweet_image):
+def post_photo(keyfile='keys.json', text, tweet_image):
     #Twitter id's and login
     print("Posting image {}...".format(tweet_image))
-    mainkey = str(keys(3))
-    mainsecret = str(keys(4))
-    access = str(keys(5))
-    accesssecret = str(keys(6))
+    mainkey = str(keys(3, keyfile))
+    mainsecret = str(keys(4, keyfile))
+    access = str(keys(5, keyfile))
+    accesssecret = str(keys(6, keyfile))
     auth = tweepy.OAuthHandler(mainkey, mainsecret)
     auth.set_access_token(access, accesssecret)
     tclient = tweepy.API(auth)
     tclient.update_with_media(tweet_image, text)
     print("Done!")
 
-def get_photo_ids(search, limit=1):
-    client_id = str(keys(1))
-    client_secret = str(keys(2))
+def get_photo_ids(search, limit=1, keyfile='keys.json'):
+    client_id = str(keys(1, keyfile))
+    client_secret = str(keys(2, keyfile))
     iclient = ImgurClient(client_id, client_secret)
     print("Finding images with search criteria {}".format(search))
     get_photos = iclient.gallery_search(search, sort='time', window='day')
@@ -139,8 +154,8 @@ def get_cache():
     os.chdir('..')
     return items
 
-def main(text="#dogs #imgur", search='title:dogs', limit=1, timer=5, clear=True):
-    gotten = get_photo_ids(search, limit)
+def main(keyfile='keys.json', text="#dogs #imgur", search='title:dogs', limit=1, timer=5, clear=True):
+    gotten = get_photo_ids(search, limit, keyfile)
     get_img_by_ids(gotten)
     cached_images = get_cache()
     for image in cached_images:
@@ -152,4 +167,36 @@ def main(text="#dogs #imgur", search='title:dogs', limit=1, timer=5, clear=True)
     else:
         pass
 
-main()
+def eval_args():
+    output = []
+    for arg in sys.argv:
+        if arg is '-k': # use 0 for keyfile
+            arg_index = sys.argv.index(arg)
+            keyfile = sys.argv[arg_index + 1]
+            output.insert(0, keyfile)
+        elif arg is '-p': # use 1 for post text
+            arg_index = sys.argv.index(arg)
+            posttext = sys.argv[arg_index + 1]
+            output.insert(1, posttext)
+        elif arg is '-s': # use 2 for search text
+            arg_index = sys.argv.index(arg)
+            searchtext = sys.argv[arg_index + 1]
+            output.insert(2, searchtext)
+        elif arg is '-l': # use 3 for limit
+            arg_index = sys.argv.index(arg)
+            limitnum = int(sys.argv[arg_index + 1])
+            output.insert(3, limitnum)
+        elif arg is '-t': # use 4 for timer
+            arg_index = sys.argv.index(arg)
+            timernum = int(sys.argv[arg_index + 1])
+            output.insert(4, timernum)
+    if '-c' in sys.argv: # use 5 for clear value
+        output.insert(5, True)
+    else:
+        output.insert(5, False)
+
+    return output
+
+cmd_args = eval_args()
+
+main(cmd_args[0],cmd_args[1],cmd_args[2],cmd_args[3],cmd_args[4],cmd_args[5])
