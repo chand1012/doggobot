@@ -1,15 +1,19 @@
+from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 from imgurpython import ImgurClient
 import tweepy
 from time import sleep
 from bs4 import BeautifulSoup
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import sys, os
 import json
 
 
 def wait(sleeptime):
     actual_time = 60*int(sleeptime)
-    print "Waiting for {} minutes...".format(sleeptime)
+    print("Waiting for {} minutes...".format(sleeptime))
     sleep(actual_time)
 
 # handles the keys from the specified file
@@ -17,7 +21,7 @@ def keys(which_key='-1', file_name='keys.json'):
     try:
         file_keys = open(file_name)
     except:
-        print "Error! JSON file does not exist!"
+        print("Error! JSON file does not exist!")
         raise
     parsed_json = json.loads(file_keys.read())
 
@@ -46,20 +50,20 @@ def get_img(url):
     if 'imgur' in url:
         #check for cache then if not found creates it
         if not os.path.exists('cache'):
-            print "Cache not found, creating one..."
+            print("Cache not found, creating one...")
             os.makedirs('cache')
 
             #checks for file extension, and if true, skips to download.
             #If not it parses the html and extracts the image link
         extensions = ['.jpg', '.gif', '.png']
         if not any(thing in url for thing in extensions):
-            print "No extension, extracting direct link..."
-            imgur_item = urllib.urlopen(url)
+            print("No extension, extracting direct link...")
+            imgur_item = urllib.request.urlopen(url)
             page = BeautifulSoup(imgur_item, 'html.parser')
             image_link_raw = page.img.get('src')
             image_link = image_link_raw[2:]
         else:
-            print "Direct link, downloading..."
+            print("Direct link, downloading...")
             image_link = url
         if 'http://' in image_link:
             image_link_http = image_link
@@ -67,7 +71,7 @@ def get_img(url):
             image_link_http = "http://{}".format(image_link)
             name = image_link[12:]
         wget(image_link_http, "cache/{}".format(name))
-        print "Done!"
+        print("Done!")
         return name
     else:
         return None
@@ -81,7 +85,7 @@ def get_img_by_ids(id_array):
     return amt
 
 def clear_cache():
-    print "Clearing cache..."
+    print("Clearing cache...")
     try:
         os.chdir('cache')
         stuff = os.listdir('.')
@@ -89,12 +93,12 @@ def clear_cache():
             os.remove(thing)
         os.chdir('..')
     except:
-        print "Cache does not exist!"
-    print "Done!"
+        print("Cache does not exist!")
+    print("Done!")
 
 def post_photo(text, tweet_image):
     #Twitter id's and login
-    print "Posting image {}...".format(tweet_image)
+    print("Posting image {}...".format(tweet_image))
     mainkey = str(keys(3))
     mainsecret = str(keys(4))
     access = str(keys(5))
@@ -103,24 +107,24 @@ def post_photo(text, tweet_image):
     auth.set_access_token(access, accesssecret)
     tclient = tweepy.API(auth)
     tclient.update_with_media(tweet_image, text)
-    print "Done!"
+    print("Done!")
 
 def get_photo_ids(search, limit=1):
     client_id = str(keys(1))
     client_secret = str(keys(2))
     iclient = ImgurClient(client_id, client_secret)
-    print "Finding images with search criteria {}".format(search)
+    print("Finding images with search criteria {}".format(search))
     get_photos = iclient.gallery_search(search, sort='time', window='day')
     photo_ids = []
     stop = 0
 
-    print "Getting ids of {} images".format(limit)
+    print("Getting ids of {} images".format(limit))
     for photo in get_photos:
         stop += 1
         photo_ids += [photo.id]
         if stop >= int(limit):
             break
-    print "Done!"
+    print("Done!")
     return photo_ids
 
 def get_cache():

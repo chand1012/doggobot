@@ -2,15 +2,17 @@
 This will generate the keys.json file for the app to use.
 Just run this script before you try to run doggobot.py
 '''
+from __future__ import print_function
+from builtins import input
 import json
 
 #get the API keys for the user
-imgur_id = raw_input('Imgur client id: ')
-imgur_secret = raw_input('Imgur client secret: ')
-consumerkey = raw_input('Twitter consumer key: ')
-consumersecret = raw_input('Twitter consumer secret key: ')
-access = raw_input('Twitter access token: ')
-access_secret = raw_input('Twitter access secret key: ')
+imgur_id = input('Imgur client id: ')
+imgur_secret = input('Imgur client secret: ')
+consumerkey = input('Twitter consumer key: ')
+consumersecret = input('Twitter consumer secret key: ')
+access = input('Twitter access token: ')
+access_secret = input('Twitter access secret key: ')
 
 #compiles information to object
 data = {}
@@ -27,4 +29,4 @@ json_file = open('keys.json', 'w+')
 json_file.write(json_data)
 json_file.close()
 
-print 'File successfully written.'
+print('File successfully written.')

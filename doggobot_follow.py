@@ -1,3 +1,5 @@
+from __future__ import print_function
+from builtins import str
 from imgurpython import ImgurClient
 import random
 import tweepy
@@ -8,7 +10,7 @@ import json
 #to wait
 def wait(sleeptime):
     actual_time = 60*int(sleeptime)
-    print "Waiting for {} minutes...".format(sleeptime)
+    print("Waiting for {} minutes...".format(sleeptime))
     sleep(actual_time)
 
 # handles the keys from the specified file
@@ -16,7 +18,7 @@ def keys(which_key='-1', file_name='keys.json'):
     try:
         file_keys = open(file_name)
     except:
-        print "Error! JSON file does not exist!"
+        print("Error! JSON file does not exist!")
         raise
     parsed_json = json.loads(file_keys.read())
 
@@ -47,7 +49,7 @@ def follow_user_followers_random(user, wait_time=1):
     try:
         followers = tclient.followers_ids(user)
     except:
-        print "User {} not found.".format(user)
+        print("User {} not found.".format(user))
         sys.exit()
     if len(followers) > 100:
         count = 0
@@ -62,23 +64,23 @@ def follow_user_followers_random(user, wait_time=1):
                 if not follower in test_followers:
                     try:
                         tclient.create_friendship(follower)
-                        print "Followed user {}".format(follower)
-                        print "Waiting to follow for {} minutes.".format(wait_time)
+                        print("Followed user {}".format(follower))
+                        print("Waiting to follow for {} minutes.".format(wait_time))
                         wait(wait_time)
                     except:
-                        print "Error! Already following or user {} doesn't exist.".format(follower)
-                        print "Waiting to follow for {} minutes.".format(wait_time)
+                        print("Error! Already following or user {} doesn't exist.".format(follower))
+                        print("Waiting to follow for {} minutes.".format(wait_time))
                         wait(wait_time)
                         pass
     else:
         for follower in followers:
             try:
                 tclient.create_friendship(follower)
-                print "User followed {}".format(follower)
-                print "Waiting to follow for {} minutes.".format(wait_time)
+                print("User followed {}".format(follower))
+                print("Waiting to follow for {} minutes.".format(wait_time))
                 wait(wait_time)
             except:
-                print "Error! Already following or user {} doesn't exist.".format(follower)
+                print("Error! Already following or user {} doesn't exist.".format(follower))
                 pass
 
 random_user = random.randint(1, 320000000) # this should cover most of the twitter users
