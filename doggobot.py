@@ -1,4 +1,3 @@
-#NEED TO TEST
 from __future__ import print_function
 from future import standard_library
 standard_library.install_aliases()
@@ -167,36 +166,5 @@ def main(keyfile='keys.json', text="#dogs #imgur", search='title:dogs', limit=1,
     else:
         pass
 
-def eval_args():
-    output = []
-    for arg in sys.argv:
-        if arg is '-k': # use 0 for keyfile
-            arg_index = sys.argv.index(arg)
-            keyfile = sys.argv[arg_index + 1]
-            output.insert(0, keyfile)
-        elif arg is '-p': # use 1 for post text
-            arg_index = sys.argv.index(arg)
-            posttext = sys.argv[arg_index + 1]
-            output.insert(1, posttext)
-        elif arg is '-s': # use 2 for search text
-            arg_index = sys.argv.index(arg)
-            searchtext = sys.argv[arg_index + 1]
-            output.insert(2, searchtext)
-        elif arg is '-l': # use 3 for limit
-            arg_index = sys.argv.index(arg)
-            limitnum = int(sys.argv[arg_index + 1])
-            output.insert(3, limitnum)
-        elif arg is '-t': # use 4 for timer
-            arg_index = sys.argv.index(arg)
-            timernum = int(sys.argv[arg_index + 1])
-            output.insert(4, timernum)
-    if '-c' in sys.argv: # use 5 for clear value
-        output.insert(5, True)
-    else:
-        output.insert(5, False)
 
-    return output
-
-cmd_args = eval_args()
-
-main(cmd_args[0],cmd_args[1],cmd_args[2],cmd_args[3],cmd_args[4],cmd_args[5])
+main()
