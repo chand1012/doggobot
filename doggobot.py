@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 import urllib.request, urllib.parse, urllib.error
 import sys, os
 import json
+import argparse
 
 global version
 version = int(sys.version[:1])
@@ -153,7 +154,7 @@ def get_cache():
     os.chdir('..')
     return items
 
-def main(keyfile='keys.json', text="#dogs #imgur", search='title:dogs', limit=1, timer=5, clear=True):
+def main(keyfile='keys.json', text="#dogs #imgur", search='title:dogs', limit=1, timer=5, clear=False):
     gotten = get_photo_ids(search, limit, keyfile)
     get_img_by_ids(gotten)
     cached_images = get_cache()
@@ -162,9 +163,19 @@ def main(keyfile='keys.json', text="#dogs #imgur", search='title:dogs', limit=1,
         post_photo(text, image_location)
         wait(timer)
     if clear == True:
-        clear_cache
+        clear_cache()
     else:
         pass
 
+parser = argparse.ArgumentParser(description="Doggobot for Twitter and Imgur")
+#-db DATABSE -u USERNAME -p PASSWORD -size 20
+parser.add_argument("-f", "--keyfile", help="File name of the keyfile")
+parser.add_argument("-text", "--text", help="Text for Twitter post")
+parser.add_argument("-s", "--search", help="Text for Imgur search")
+parser.add_argument("-l", "--limit", help="Limit for how many images to find and download", type=int)
+parser.add_argument("-t", "--time", help="The amount of time in minutes between posts", type=int)
+parser.add_argument("-c", "--clear", help="If enabled, clears cache when completed.", action='store_true')
+
+args = parser.parse_args()
 
 main()
