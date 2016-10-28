@@ -178,4 +178,8 @@ parser.add_argument("-c", "--clear", help="If enabled, clears cache when complet
 
 args = parser.parse_args()
 
-main()
+args_list = [args.keyfile, args.text, args.limit, args.time]
+if all(thing is None for thing in args_list):
+    main()
+else:
+    main(args.keyfile, args.text, args.search, args.limit, args.timer, args.clear)
