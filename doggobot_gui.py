@@ -1,12 +1,36 @@
 from tkinter import *
 
 root = Tk()
+arguments = []
 
 def get_command_arguments():
     if keyfile.get() is "":
-        print("keys.json")
+        arguments += ["keys.json"]
     else:
-        print(keyfile.get())
+        arguments += [keyfile.get()]
+
+    if text.get() is "":
+        arguments += ["#doggobot"]
+    else:
+        arguments += [text.get()]
+
+    if search.get() is "":
+        arguments += ["dogs"]
+    else:
+        arguments += [search.get()]
+
+    if limit.get() is "":
+        arguments += ["1"]
+    else:
+        arguments += [limit.get()]
+
+    if time.get() is "":
+        arguments += ["30"]
+    else:
+        arguments += [time.get()]
+
+    arguments += [clear.get()]
+
 
 keyfile_text = Label(root, text="Keyfile")
 keyfile_text.pack(side=LEFT)
@@ -41,6 +65,6 @@ time_box.pack(side=TOP)
 clear = BooleanVar()
 clear_box = Checkbutton(root, text="Clear", variable=clear, onvalue=True, offvalue=False, height=5, width=20)
 
-button = Button(root, text="Submit", command=get_command_arguments)
+button = Button(root, text="Start", command=get_command_arguments)
 button.pack(side=RIGHT)
 root.mainloop()
