@@ -1,9 +1,11 @@
 from tkinter import *
 
 root = Tk()
-arguments = []
+
 
 def get_command_arguments():
+    global arguments
+    arguments = []
     if keyfile.get() is "":
         arguments += ["keys.json"]
     else:
@@ -30,7 +32,7 @@ def get_command_arguments():
         arguments += [time.get()]
 
     arguments += [clear.get()]
-
+    print(arguments)
 
 keyfile_text = Label(root, text="Keyfile")
 keyfile_text.pack(side=LEFT)
