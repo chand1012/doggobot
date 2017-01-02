@@ -1,7 +1,16 @@
 from tkinter import *
+import sys, os
 
 root = Tk()
 
+
+def execute_bot(array):
+    if array[5] is True:
+        clear_command = '-c'
+    else:
+        clear_command = ''
+    command_string = "python doggobot.py -f {} -text {} -s {} -l {} -t {} {}".format(array[0], array[1], array[2], array[3], array[4], clear_command)
+    os.system(command_string)
 
 def get_command_arguments():
     global arguments
@@ -33,6 +42,7 @@ def get_command_arguments():
 
     arguments += [clear.get()]
     print(arguments)
+    execute_bot(arguments)
 
 keyfile_text = Label(root, text="Keyfile")
 keyfile_text.pack(side=LEFT)
@@ -67,6 +77,7 @@ time_box.pack(side=TOP)
 clear = BooleanVar()
 clear_box = Checkbutton(root, text="Clear cache?", variable=clear, onvalue=True, offvalue=False, height=5, width=20)
 clear_box.pack()
+
 button = Button(root, text="Start", command=get_command_arguments)
 button.pack(side=RIGHT)
 root.mainloop()
