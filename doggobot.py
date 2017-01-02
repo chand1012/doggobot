@@ -31,7 +31,7 @@ def keys(which_key='-1', file_name='keys.json'):
                 run = input("(Y/N):")
             else:
                 run = raw_input("(Y/N):")
-            if run == 'y' or run? == 'Y':
+            if run == 'y' or run == 'Y':
                 os.system('python json_gen.py')
                 pass
             else:
@@ -111,7 +111,7 @@ def clear_cache():
         print("Cache does not exist!")
     print("Done!")
 
-def post_photo(keyfile='keys.json', text, tweet_image):
+def post_photo(keyfile='keys.json', text='', tweet_image=''):
     #Twitter id's and login
     print("Posting image {}...".format(tweet_image))
     mainkey = str(keys(3, keyfile))
@@ -168,7 +168,6 @@ def main(keyfile='keys.json', text="#dogs #imgur", search='title:dogs', limit=1,
         pass
 
 parser = argparse.ArgumentParser(description="Doggobot for Twitter and Imgur")
-#-db DATABSE -u USERNAME -p PASSWORD -size 20
 parser.add_argument("-f", "--keyfile", help="File name of the keyfile")
 parser.add_argument("-text", "--text", help="Text for Twitter post")
 parser.add_argument("-s", "--search", help="Text for Imgur search")
