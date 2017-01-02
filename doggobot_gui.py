@@ -65,8 +65,8 @@ time_box = Entry(root, bd=3, textvariable=time)
 time_box.pack(side=TOP)
 
 clear = BooleanVar()
-clear_box = Checkbutton(root, text="Clear", variable=clear, onvalue=True, offvalue=False, height=5, width=20)
-
+clear_box = Checkbutton(root, text="Clear cache?", variable=clear, onvalue=True, offvalue=False, height=5, width=20)
+clear_box.pack()
 button = Button(root, text="Start", command=get_command_arguments)
 button.pack(side=RIGHT)
 root.mainloop()
