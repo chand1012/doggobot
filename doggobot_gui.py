@@ -1,0 +1,46 @@
+from tkinter import *
+
+root = Tk()
+
+def get_command_arguments():
+    if keyfile.get() is "":
+        print("keys.json")
+    else:
+        print(keyfile.get())
+
+keyfile_text = Label(root, text="Keyfile")
+keyfile_text.pack(side=LEFT)
+keyfile = StringVar()
+keyfile_box = Entry(root, bd=3, textvariable=keyfile)
+keyfile_box.pack(side=TOP)
+
+text_text = Label(root, text="Post text")
+text_text.pack(side=LEFT)
+text = StringVar()
+text_box = Entry(root, bd=3, textvariable=text)
+text_box.pack(side=TOP)
+
+search_text = Label(root, text="Search query text")
+search_text.pack(side=LEFT)
+search = StringVar()
+search_box = Entry(root, bd=3, textvariable=search)
+search_box.pack(side=TOP)
+
+limit_text = Label(root, text="Precached photo limit")
+limit_text.pack(side=LEFT)
+limit = StringVar()
+limit_box = Entry(root, bd=3, textvariable=limit)
+limit_box.pack(side=TOP)
+
+time_text = Label(root, text="Time between posts")
+time_text.pack(side=LEFT)
+time = StringVar()
+time_box = Entry(root, bd=3, textvariable=time)
+time_box.pack(side=TOP)
+
+clear = BooleanVar()
+clear_box = Checkbutton(root, text="Clear", variable=clear, onvalue=True, offvalue=False, height=5, width=20)
+
+button = Button(root, text="Submit", command=get_command_arguments)
+button.pack(side=RIGHT)
+root.mainloop()
