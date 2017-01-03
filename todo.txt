@@ -1,3 +1,5 @@
 add more comments
 clean up code
-
+finish gui
+add comments to gui code
+make a gui icon
