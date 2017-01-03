@@ -45,7 +45,7 @@ def get_command_arguments():
     print(arguments)
     execute_bot(arguments)
 
-def help():
+def help_command():
     if sys.platform is 'linux':
         os.system("xdg-open http://github.com/chand1012/doggobot")
     elif sys.platform is 'win32':
@@ -88,7 +88,8 @@ clear_box.grid(row=5)
 button = Button(root, text="Start", command=get_command_arguments)
 button.grid(row=6, column=1)
 
-
+help_button = Button(root, text="Help", command=help_command)
+help_button.grid(row=6)
 
 root.mw_title("Doggobot")
 root.bitmapicon(r"./data/doggobot.ico")
