@@ -3,3 +3,4 @@ clean up code
 finish gui
 add comments to gui code
 edit README.md
+fix 'help' button
