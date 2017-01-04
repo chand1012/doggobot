@@ -1,8 +1,14 @@
 from tkinter import *
 import sys, os
 
-root = Tk()
+global icon
+appdata = os.getenv('APPDATA')
+if 'win32' in sys.platform:
+    icon = r'{}/doggobot/icon.ico'.format(appdata)
+else:
+    icon = r'./data/icon.ico'
 
+root = Tk()
 
 def execute_bot(array):
     if array[5] is True:
@@ -92,5 +98,8 @@ help_button = Button(root, text="Help", command=help_command)
 help_button.grid(row=6)
 
 root.title("Doggobot")
-root.iconbitmap(r"./data/doggobot.ico")
+try:
+    root.iconbitmap(icon)
+except:
+    pass
 root.mainloop()
