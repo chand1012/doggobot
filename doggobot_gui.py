@@ -49,7 +49,7 @@ def help_command():
     if sys.platform is 'linux':
         os.system("xdg-open http://github.com/chand1012/doggobot")
     elif sys.platform is 'win32':
-        os.system('start "" https://github.com/chand1012/doggobot')
+        os.system('start "" http://github.com/chand1012/doggobot')
 
 keyfile_text = Label(root, text="Keyfile")
 keyfile_text.grid(row=0)
@@ -91,6 +91,6 @@ button.grid(row=6, column=1)
 help_button = Button(root, text="Help", command=help_command)
 help_button.grid(row=6)
 
-root.mw_title("Doggobot")
-root.bitmapicon(r"./data/doggobot.ico")
+root.title("Doggobot")
+root.iconbitmap(r"./data/doggobot.ico")
 root.mainloop()
