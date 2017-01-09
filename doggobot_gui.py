@@ -1,21 +1,27 @@
 from tkinter import *
 import sys, os
 
+global python
 global icon
 appdata = os.getenv('APPDATA')
-if 'win32' in sys.platform:
+if 'win32' in sys.platform: #change this to a settings file to add the python executeable
     icon = r'{}/doggobot/icon.ico'.format(appdata)
+    python = 'python'
 else:
     icon = r'./data/icon.ico'
+    python = 'python3'
 
 root = Tk()
+
+def help_window():
+    TopLevel(root)
 
 def execute_bot(array):
     if array[5] is True:
         clear_command = '-c'
     else:
         clear_command = ''
-    command_string = "python doggobot.py -f {} -text {} -s {} -l {} -t {} {}".format(array[0], array[1], array[2], array[3], array[4], clear_command)
+    command_string = "{} doggobot.py -f {} -text {} -s {} -l {} -t {} {}".format(python, array[0], array[1], array[2], array[3], array[4], clear_command)
     print("Using command string:\n{}".format(command_string))
     os.system(command_string)
 
