@@ -14,7 +14,9 @@ else:
 root = Tk()
 
 def help_window():
-    TopLevel(root)
+    top = Toplevel(root)
+    #add more stuff to this
+    kill = Button(top,text='Close',command=top.destroy).pack()
 
 def execute_bot(array):
     if array[5] is True:
@@ -100,7 +102,7 @@ clear_box.grid(row=5)
 button = Button(root, text="Start", command=get_command_arguments)
 button.grid(row=6, column=1)
 
-help_button = Button(root, text="Help", command=help_command)
+help_button = Button(root, text="Help", command=help_window)
 help_button.grid(row=6)
 
 root.title("Doggobot")
