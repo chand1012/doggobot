@@ -1,5 +1,7 @@
 from tkinter import *
+from tkinter import messagebox
 import sys, os
+import json
 
 global python
 global icon
@@ -13,8 +15,77 @@ else:
 
 root = Tk()
 
+def json_window(): # fix this
+    json_window = Toplevel(root)
+    json_window.title('JSON Generate')
+    id_text = Label(json_window, text="Imgur API Client ID")
+    id_text.grid(row=0)
+    id_str = StringVar()
+    id_box = Entry(json_window, bd=3, textvariable=id_str)
+    id_box.grid(row=0, column=1)
+
+    imgur_secret_text = Label(json_window, text="Imgur Client secret")
+    imgur_secret_text.grid(row=0)
+    imgur_secret = StringVar()
+    imgur_secret_box = Entry(json_window, bd=3, textvariable=imgur_secret)
+    imgur_secret_box.grid(row=0, column=1)
+
+    consumer_key_text = Label(json_window, text="Twitter consumer key")
+    consumer_key_text.grid(row=0)
+    consumer_key = StringVar()
+    consumer_key_box = Entry(json_window, bd=3, textvariable=consumer_key)
+    consumer_key_box.grid(row=0, column=1)
+
+    consumer_secret_text = Label(json_window, text="Twitter consumer secret key")
+    consumer_secret_text.grid(row=0)
+    consumer_secret = StringVar()
+    consumer_secret_box = Entry(json_window, bd=3, textvariable=consumer_secret)
+    consumer_secret_box.grid(row=0, column=1)
+
+    access_token_text = Label(json_window, text="Twitter access token")
+    access_token_text.grid(row=0)
+    access_token = StringVar()
+    access_token_box = Entry(json_window, bd=3, textvariable=access_token)
+    access_token_box.grid(row=0, column=1)
+
+    access_secret_text = Label(json_window, text="Twitter access token")
+    access_secret_text.grid(row=0)
+    access_secret = StringVar()
+    access_secret_box = Entry(json_window, bd=3, textvariable=access_secret)
+    access_secret_box.grid(row=0, column=1)
+
+    makebutton = Button(json_window, text="Start", command= lambda: json_gen('keys.json', id_str.get(), imgur_secret.get(), consumer_key.get(), consumer_secret.get(), access_token.get(), access_secret.get()))
+    makebutton.grid(row=6, column=1)
+
+def json_gen(filename, imgurid, imgursecret, consumerkey, consumersecret, access, accesssecret):
+    data = {}
+    data["client_id_imgur"] = imgurid
+    data["client_secret_imgur"] = imgursecret
+    data["tw_consumer_key"] = consumerkey
+    data["tw_consumer_secret"] = consumersecret
+    data["access_token"] = access
+    data["access_secret"] = accesssecret
+
+    json_data = json.dumps(data)
+    json_file = open(filename, 'w+')
+    json_file.write(json_data)
+    json_file.close()
+
+    messagebox.showinfo('JSON Generation', 'JSON file successfully written!')
+
 def help_window():
     top = Toplevel(root)
+    top.iconbitmap(icon)
+    top.title("Help")
+    helptext = '''
+    Keyfile - File in which the keys are stored.
+    If file is not found, you can generate one by pressing the generate Button
+    Text - Text for the Tweet
+    Search - Search for the Imgur query
+    Limit - Number of allowed Precached photos
+    Time - Number of minutes between posts
+    '''
+    helptextitem = Label(top, text=helptext).pack()
     #add more stuff to this
     kill = Button(top,text='Close',command=top.destroy).pack()
 
@@ -104,6 +175,9 @@ button.grid(row=6, column=1)
 
 help_button = Button(root, text="Help", command=help_window)
 help_button.grid(row=6)
+
+json_button = Button(root, text="JSON", command=json_window)
+json_button.grid(row=7)
 
 root.title("Doggobot")
 try:
